@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="/vite.svg">
+    <link rel="preload" href="/fonts/open-sans-v36-cyrillic_latin-regular.woff2" as="font" type="font/woff2" crossorigin="">
+    <link rel="preload" href="/fonts/open-sans-v36-cyrillic_latin-700.woff2" as="font" type="font/woff2" crossorigin="">
+    <link rel="preload" href="/fonts/inter-v13-cyrillic_latin-regular.woff2" as="font" type="font/woff2" crossorigin="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="/main.js"></script>
     <title>Мебельный маркет Koff</title>
@@ -344,7 +347,7 @@
         </div>
       </section>
 
-      <section class="cart" hidden>
+      <section class="cart">
         <div class="container cart__container">
           <h2 class="cart__title">Корзина</h2>
           <ul class="cart__products">
@@ -428,42 +431,44 @@
         </div>
       </section>
 
-      <div class="modal-order">
-        <p class="modal-order__title">Заказ успешно размещен</p>
-        <p class="modal-order__price">20&nbsp;000&nbsp;₽</p>
-        <p class="modal-order__article">№43435</p>
-        <div class="modal-order__info">
-          <p class="modal-order__info-title">Данные доставки</p>
-          <ul class="modal-order__list">
-            <li class="modal-order__item">
-              <p class="modal-order__item-name">Получатель</p>
-              <p class="modal-order__item-mean">Иванов Петр Александрович</p>
-            </li>
-            <li class="modal-order__item">
-              <p class="modal-order__item-name">Телефон</p>
-              <p class="modal-order__item-mean">+7 (737) 346 23 00</p>
-            </li>
-            <li class="modal-order__item">
-              <p class="modal-order__item-name">E-mail</p>
-              <p class="modal-order__item-mean">Ivanov84@gmail.com</p>
-            </li>
-            <li class="modal-order__item">
-              <p class="modal-order__item-name">Адрес доставки</p>
-              <p class="modal-order__item-mean">Москва, ул. Ленина, 21, кв. 33</p>
-            </li>
-            <li class="modal-order__item">
-              <p class="modal-order__item-name">Способ оплаты</p>
-              <p class="modal-order__item-mean">Картой при получении</p>
-            </li>
-            <li class="modal-order__item">
-              <p class="modal-order__item-name">Способ получения</p>
-              <p class="modal-order__item-mean">Доставка</p>
-            </li>
-          </ul>
-        </div>
-
-        <a class="modal-order__link" href="/">На главную</a>
-      </div>
+      <section class="modal-order" hidden>
+        <div class="container modal-order__container">
+          <p class="modal-order__title">Заказ успешно размещен</p>
+          <p class="modal-order__price">20&nbsp;000&nbsp;₽</p>
+          <p class="modal-order__article">№43435</p>
+          <div class="modal-order__info">
+            <p class="modal-order__info-title">Данные доставки</p>
+            <ul class="modal-order__list">
+              <li class="modal-order__item">
+                <p class="modal-order__item-name">Получатель</p>
+                <p class="modal-order__item-mean">Иванов Петр Александрович</p>
+              </li>
+              <li class="modal-order__item">
+                <p class="modal-order__item-name">Телефон</p>
+                <p class="modal-order__item-mean">+7 (737) 346 23 00</p>
+              </li>
+              <li class="modal-order__item">
+                <p class="modal-order__item-name">E-mail</p>
+                <p class="modal-order__item-mean">Ivanov84@gmail.com</p>
+              </li>
+              <li class="modal-order__item">
+                <p class="modal-order__item-name">Адрес доставки</p>
+                <p class="modal-order__item-mean">Москва, ул. Ленина, 21, кв. 33</p>
+              </li>
+              <li class="modal-order__item">
+                <p class="modal-order__item-name">Способ оплаты</p>
+                <p class="modal-order__item-mean">Картой при получении</p>
+              </li>
+              <li class="modal-order__item">
+                <p class="modal-order__item-name">Способ получения</p>
+                <p class="modal-order__item-mean">Доставка</p>
+              </li>
+            </ul>
+          </div>
+  
+          <a class="modal-order__link" href="/">На главную</a>
+        </div>        
+      </section>
 
     </main>
 
