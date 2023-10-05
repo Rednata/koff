@@ -84,21 +84,10 @@ iframe {
   transform: scale(0);
 }
 
-
-/*
-Пример контейнера
-
-Если контейнер 1180px по макету,
-то для max-width прибавляем паддинги 30px*2, 
-в итоге 1240px
-Чтобы контент не прижимался к краям экрана
-*/
-
 .container {
   max-width: 1440px;
   padding: 0 16px;
   margin: 0 auto;
-  border: 1px solid red;
 
   @media (min-width: 580px) {
     padding: 0 29px;
