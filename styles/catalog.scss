@@ -1,15 +1,77 @@
 .catalog {
+	border: 1px solid red;
+	overflow-x: hidden;
+	padding-top: 24px;
+
+	@media (min-width: 580px) {
+		padding-top: 32px;
+	}
+	@media (min-width: 820px) {
+		padding-top: 40px;
+	}
 
 		&__container {
+			// padding-right: 0;
+			padding: 0;
+			border: 1px solid green;
+
+			// @media (min-width: 1120px) {
+			// 	padding: 0 92px;
+
+			// }
 		}
 
 		&__list {
+			display: flex;
+			gap: 4px;
+			overflow-x: auto;
+			padding: 0 16px;
+
+			@media (min-width: 580px) {
+				padding: 0 29px;
+			}
+		
+			@media (min-width: 820px) {
+				padding: 0 43px;
+			}
+		
+			@media (min-width: 1120px) {
+				padding: 0 92px;
+			}
 		}
 
 		&__item {
 		}
 
 		&__link {
+			display: block;
+			color: #969EAE;
+			border-radius: 32px;
+			background-color: #EEEFF2;
+			padding: 8px 14px 10px 14px;
+			outline: none;
+			border: 1px solid transparent;
+
+			&:hover,
+			&:focus-visible {
+				color: #780096;
+				border-color: #780096;
+			}
+			&:active,
+			&_active {
+				color: #fff;
+				background-color: #780096;
+
+				&:hover,
+				&:focus-visible {
+					color: #fff;					
+				}	
+			}
+
+			&_active {
+				pointer-events: none;
+			}
+
 		}
 }
 
