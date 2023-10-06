@@ -1,5 +1,4 @@
-.catalog {
-	border: 1px solid red;
+.catalog {	
 	overflow-x: hidden;
 	padding-top: 24px;
 
@@ -11,14 +10,7 @@
 	}
 
 		&__container {
-			// padding-right: 0;
 			padding: 0;
-			border: 1px solid green;
-
-			// @media (min-width: 1120px) {
-			// 	padding: 0 92px;
-
-			// }
 		}
 
 		&__list {
@@ -38,7 +30,7 @@
 			@media (min-width: 1120px) {
 				padding: 0 92px;
 			}
-		}
+		} 
 
 		&__item {
 		}
