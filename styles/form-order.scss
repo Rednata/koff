@@ -1,0 +1,65 @@
+.form-order {
+  display: grid;
+  gap: 16px;
+
+  @media (min-width: 580px) {
+    grid-template-columns: 230px 1fr;
+  }
+
+  &__fieldset {
+    border: none;        
+
+    &_input {
+      display: grid;
+      row-gap: 8px;
+
+      @media (min-width: 580px) {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        grid-column: 1/-1;
+      }
+      @media (min-width: 820px) {
+        gap: 16px;
+      }
+    }
+
+    &_radio {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+    }
+  }
+
+  &__input,
+  &__textarea {
+    background-color: #EEEFF2;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 4px;    
+  }
+
+  &__input::placeholder,
+  &__textarea::placeholder {
+    color: #969EAE;
+  }
+
+  &__textarea {
+    min-height: 120px;
+    resize: vertical;
+
+    @media (min-width: 580px) {
+      grid-column: 1/-1;
+    }
+  }
+
+  &__legend {
+    margin-bottom: 13px;
+
+    @media (min-width: 580px) {
+      margin-bottom: 17px;
+    }
+  }
+
+  &__label {
+  }
+}
