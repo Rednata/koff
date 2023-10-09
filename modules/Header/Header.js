@@ -1,4 +1,3 @@
-import { types } from "sass";
 import { addContainer } from "../addContainer";
 import logoImg from '/img/logo.svg';
 
@@ -35,7 +34,7 @@ export class Header {
   getLogo() {
     const logo = document.createElement('a');
     logo.classList.add('header__link-logo');
-    logo.hred = '/';
+    logo.href = '/';
 
     const imgLogo = new Image();
     imgLogo.src = logoImg;
@@ -67,7 +66,6 @@ export class Header {
         <path d="M14.6666 14.6666L13.3333 13.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>              
     `
-    console.log(button);
     searchForm.append(input, button);    
     return searchForm;
   }

@@ -1,4 +1,6 @@
 import Navigo from "navigo";
+import { Order } from '../Order/Order';
+import { Main } from '../Main/Main';
 
 export const routerFunc = () => {
   const router = new Navigo("/", { linksSelector: "a" });
@@ -26,6 +28,10 @@ export const routerFunc = () => {
     })
     .on('/order', () => {
       console.log('On order');
+      const order = new Order();
+      const main = new Main();
+      new Order().mount(new Main().element);                  
+
     })
     .notFound(() => {
       document.body.innerHTML = '<h2>NOT FOUND</h2>'
