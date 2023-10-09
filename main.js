@@ -1,7 +1,7 @@
 import 'normalize.css';
 import './style.scss';
-import { routerFunc } from './modules/routerFunc';
-
+import { routerFunc } from './modules/commonFunc/routerFunc';
+import { Header } from './modules/Header/Header';
 
 const productSlider = () => {
   Promise.all([
@@ -34,6 +34,8 @@ const productSlider = () => {
 const init = () => {
   productSlider();
   routerFunc();  
+  const header = new Header();
+  header.mount();  
 
 };
 
