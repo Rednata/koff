@@ -25,6 +25,11 @@
 		}
 
 		&__logo {
+			width: 230px;
+
+			@media (min-width: 820px) {
+				width: 331px;;
+			}	
 		}
 
 		&__contacts {			

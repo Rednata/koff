@@ -1,20 +1,41 @@
 import Navigo from "navigo";
 import { Order } from '../Order/Order';
 import { Main } from '../Main/Main';
-
+import { ProductList } from "../ProductList/ProductList";
 export const routerFunc = () => {
   const router = new Navigo("/", { linksSelector: "a" });
 
   router
     .on("/", () => {
       console.log("On main");
-    })
-    .on('/category', (obj) => {
+      new ProductList().mount(new Main().element, [1, 2, 3], );
+    },
+    {
+      leave(done, match) {
+        console.log('leave');
+        done();
+      },
+      already() {
+        console.log('already');
+      },
+    }
+    )
+    .on('/category', () => {
       console.log("On category");
-      console.log('obj: ', obj);
+      new ProductList().mount(new Main().element, [1, 2, 3, 4, 5, 6], 'Category');
+    }, {
+      leave(done) {
+        console.log('leave');
+        done();
+      }
     })
     .on('/favorite', () => {      
-      console.log("On favorite");      
+      new ProductList().mount(new Main().element, [1], 'Избранное');
+    },  {
+      leave(done) {
+        console.log('leave');
+        done();
+      }
     })
     .on('/search', () => {
       console.log("On search");
@@ -33,8 +54,20 @@ export const routerFunc = () => {
       new Order().mount(new Main().element);                  
 
     })
-    .notFound(() => {
-      document.body.innerHTML = '<h2>NOT FOUND</h2>'
+    .notFound(() => {      
+      new Main().element.innerHTML = `
+        <h2>NOT FOUND</h2>
+        <p>Через 5 секунд вы будете перенаправлены на <a> главную страницу</a></p>
+      `
+      setTimeout(() => {
+        router.navigate('/');
+      }, 5000)
+    }, {
+      leave(done) {
+        console.log('leave');
+        new Main().element.innerHTML = '';    
+        done();        
+      }
     })
   router.resolve()
 };
