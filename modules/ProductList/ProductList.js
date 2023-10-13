@@ -18,8 +18,7 @@ export class ProductList {
   }
 
   mount(parent, {data, pagination: paginationData}, title) {  
-      
-    console.log(paginationData);
+
     this.containerElement.textContent = '';
 
     const titleElement = document.createElement('h2');
@@ -29,7 +28,10 @@ export class ProductList {
     this.containerElement.append(titleElement);
     this.updateListElem(data, titleElement)
 
-    this.renderPagination(paginationData);
+    if (paginationData) {
+      this.renderPagination(paginationData);
+    }
+    
 
     if (this.isMounted) {
       return;

@@ -20,8 +20,9 @@ export const routerFunc = (api, storageService) => {
       const productCategories = await api.getProductCategories();
       new Catalog().mount( new Main().element, productCategories );      
 
-      const products = await api.getProducts();                  
-      new ProductList().mount(new Main().element, products, );
+      const products = await api.getProducts();                        
+      const data = {data: products}            
+      new ProductList().mount(new Main().element, data, );
 
       router.updatePageLinks();
     },
@@ -38,10 +39,9 @@ export const routerFunc = (api, storageService) => {
     .on('/category', async({params: {slug}}) => {
       const productCategories = await api.getProductCategories();
       new Catalog().mount( new Main().element, productCategories ); 
-
-      console.log(slug);
+      
       const data = await api.getProducts(1, 12, [], slug);
-      console.log(data);
+
       new ProductList().mount(new Main().element, data, slug);
       router.updatePageLinks();
     }, {
@@ -55,8 +55,9 @@ export const routerFunc = (api, storageService) => {
       const productCategories = await api.getProductCategories();
       new Catalog().mount( new Main().element, productCategories ); 
 
-      const products = await api.getProducts();
-      new ProductList().mount(new Main().element, products, 'Избранное');
+      const products = await api.getProducts();      
+      const data = {data: products}  
+      new ProductList().mount(new Main().element, data, 'Избранное');
       router.updatePageLinks();
     },  {
       leave(done) {
