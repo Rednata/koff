@@ -1,20 +1,29 @@
 import Navigo from "navigo";
 import { Order } from '../Order/Order';
 import { Main } from '../Main/Main';
+import { Catalog } from "../Catalog/Catalog";
 import { ProductList } from "../ProductList/ProductList";
 
 export const routerFunc = (api, storageService) => {
   const router = new Navigo("/", { linksSelector: "a" });
   
+  api.getProductCategories()
+    .then(data => {
+      new Catalog().mount( new Main().element, data );      
+      console.log('data: ', data);
+      router.updatePageLinks();
+    })
+
   router
     .on("/", async () => {
       const products = await api.getProducts();
       console.log(products);
       new ProductList().mount(new Main().element, products, );
+      router.updatePageLinks();
     },
     {
-      leave(done, match) {
-        console.log('leave');
+      leave(done) {
+        new ProductList().unMount();        
         done();
       },
       already() {
@@ -22,19 +31,24 @@ export const routerFunc = (api, storageService) => {
       },
     }
     )
-    .on('/category', () => {
-      console.log("On category");
-      new ProductList().mount(new Main().element, [1, 2, 3, 4, 5, 6], 'Category');
+    .on('/category', async({params: {slug}}) => {
+      const products = await api.getProducts();
+      new ProductList().mount(new Main().element, products, slug);
+      router.updatePageLinks();
     }, {
       leave(done) {
+        new ProductList().unMount();
         console.log('leave');
         done();
       }
     })
-    .on('/favorite', () => {      
-      new ProductList().mount(new Main().element, [1], 'Избранное');
+    .on('/favorite', async() => {      
+      const products = await api.getProducts();
+      new ProductList().mount(new Main().element, products, 'Избранное');
+      router.updatePageLinks();
     },  {
       leave(done) {
+        new ProductList().unMount();
         console.log('leave');
         done();
       }
@@ -45,9 +59,15 @@ export const routerFunc = (api, storageService) => {
     .on('/cart', () => {
       console.log("On cart");
     })
-    .on('/product/:id', (obj) => {
-      console.log(obj);
-      console.log(obj.data);
+    .on('/product/:id', async({data: {id} }) => {
+      console.log(id);
+      const temp = await api.getProductByID(id)
+      console.log(temp);
+    }, {
+      leave(done) {
+        router.updatePageLinks();
+        done();
+      }
     })
     .on('/order', () => {
       console.log('On order');
@@ -57,6 +77,7 @@ export const routerFunc = (api, storageService) => {
 
     })
     .notFound(() => {      
+      console.log(new Main());
       new Main().element.innerHTML = `
         <h2>NOT FOUND</h2>
         <p>Через 5 секунд вы будете перенаправлены на <a> главную страницу</a></p>

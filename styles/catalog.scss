@@ -9,8 +9,9 @@
 		padding-top: 40px;
 	}
 
-		&__container {
-			padding: 0;			
+		&__container {			
+			padding: 0;	
+			margin-bottom: 24px;		
 		}
 
 		&__list {
@@ -47,6 +48,7 @@
 			padding: 8px 14px 10px 14px;
 			outline: none;
 			border: 1px solid transparent;
+			white-space: nowrap;
 
 			&:hover,
 			&:focus-visible {

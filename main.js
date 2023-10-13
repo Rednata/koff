@@ -8,8 +8,8 @@ import { productSlider } from './modules/commonFunc/sliderFunc';
 import { ApiService } from './services/ApiService';
 
 const init = () => {
-  const api = new ApiService();
-
+  const api = new ApiService();  
+  
   new Header().mount();  
   new Main().mount();
   new Footer().mount();
