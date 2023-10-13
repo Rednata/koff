@@ -1,20 +1,70 @@
 import Navigo from "navigo";
 import { Order } from '../Order/Order';
 import { Main } from '../Main/Main';
+import { Catalog } from "../Catalog/Catalog";
+import { ProductList } from "../ProductList/ProductList";
+import { Error } from "../Error/Error";
 
-export const routerFunc = () => {
+export const routerFunc = (api, storageService) => {
   const router = new Navigo("/", { linksSelector: "a" });
+  
+  // api.getProductCategories()
+  //   .then(data => {
+  //     new Catalog().mount( new Main().element, data );      
+  //     console.log('data: ', data);
+  //     router.updatePageLinks();
+  //   })
 
   router
-    .on("/", () => {
-      console.log("On main");
+    .on("/", async () => {      
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories );      
+
+      const products = await api.getProducts();                        
+      const data = {data: products}            
+      new ProductList().mount(new Main().element, data, );
+
+      router.updatePageLinks();
+    },
+    {
+      leave(done) {
+        new ProductList().unMount();        
+        done();
+      },
+      already() {
+        console.log('already');
+      },
+    }
+    )
+    .on('/category', async({params: {slug}}) => {
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories ); 
+      
+      const data = await api.getProducts(1, 12, [], slug);
+
+      new ProductList().mount(new Main().element, data, slug);
+      router.updatePageLinks();
+    }, {
+      leave(done) {
+        new ProductList().unMount();
+        console.log('leave');
+        done();
+      }
     })
-    .on('/category', (obj) => {
-      console.log("On category");
-      console.log('obj: ', obj);
-    })
-    .on('/favorite', () => {      
-      console.log("On favorite");      
+    .on('/favorite', async() => {      
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories ); 
+
+      const products = await api.getProducts();      
+      const data = {data: products}  
+      new ProductList().mount(new Main().element, data, 'Избранное');
+      router.updatePageLinks();
+    },  {
+      leave(done) {
+        new ProductList().unMount();
+        console.log('leave');
+        done();
+      }
     })
     .on('/search', () => {
       console.log("On search");
@@ -22,9 +72,18 @@ export const routerFunc = () => {
     .on('/cart', () => {
       console.log("On cart");
     })
-    .on('/product/:id', (obj) => {
-      console.log(obj);
-      console.log(obj.data);
+    .on('/product/:id', async({data: {id} }) => {
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories ); 
+      router.updatePageLinks();
+      console.log(id);
+      const temp = await api.getProductByID(id)
+      console.log(temp);
+
+    }, {
+      leave(done) {        
+        done();
+      }
     })
     .on('/order', () => {
       console.log('On order');
@@ -33,8 +92,21 @@ export const routerFunc = () => {
       new Order().mount(new Main().element);                  
 
     })
-    .notFound(() => {
-      document.body.innerHTML = '<h2>NOT FOUND</h2>'
+    .notFound(() => {            
+      new Error().mount();      
+      setTimeout(() => {
+        router.navigate('/');
+      }, 5000)
+    }, {
+      before(done) {
+        new Catalog().unMount();
+        done();
+      },
+      leave(done) {
+        console.log('leave');
+        new Error().unMount();  
+        done();        
+      }
     })
   router.resolve()
 };
