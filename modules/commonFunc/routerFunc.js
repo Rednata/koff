@@ -2,13 +2,15 @@ import Navigo from "navigo";
 import { Order } from '../Order/Order';
 import { Main } from '../Main/Main';
 import { ProductList } from "../ProductList/ProductList";
-export const routerFunc = () => {
-  const router = new Navigo("/", { linksSelector: "a" });
 
+export const routerFunc = (api, storageService) => {
+  const router = new Navigo("/", { linksSelector: "a" });
+  
   router
-    .on("/", () => {
-      console.log("On main");
-      new ProductList().mount(new Main().element, [1, 2, 3], );
+    .on("/", async () => {
+      const products = await api.getProducts();
+      console.log(products);
+      new ProductList().mount(new Main().element, products, );
     },
     {
       leave(done, match) {
