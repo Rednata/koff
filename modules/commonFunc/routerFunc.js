@@ -3,22 +3,26 @@ import { Order } from '../Order/Order';
 import { Main } from '../Main/Main';
 import { Catalog } from "../Catalog/Catalog";
 import { ProductList } from "../ProductList/ProductList";
+import { Error } from "../Error/Error";
 
 export const routerFunc = (api, storageService) => {
   const router = new Navigo("/", { linksSelector: "a" });
   
-  api.getProductCategories()
-    .then(data => {
-      new Catalog().mount( new Main().element, data );      
-      console.log('data: ', data);
-      router.updatePageLinks();
-    })
+  // api.getProductCategories()
+  //   .then(data => {
+  //     new Catalog().mount( new Main().element, data );      
+  //     console.log('data: ', data);
+  //     router.updatePageLinks();
+  //   })
 
   router
-    .on("/", async () => {
-      const products = await api.getProducts();
-      console.log(products);
+    .on("/", async () => {      
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories );      
+
+      const products = await api.getProducts();                  
       new ProductList().mount(new Main().element, products, );
+
       router.updatePageLinks();
     },
     {
@@ -32,6 +36,9 @@ export const routerFunc = (api, storageService) => {
     }
     )
     .on('/category', async({params: {slug}}) => {
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories ); 
+
       const products = await api.getProducts();
       new ProductList().mount(new Main().element, products, slug);
       router.updatePageLinks();
@@ -43,6 +50,9 @@ export const routerFunc = (api, storageService) => {
       }
     })
     .on('/favorite', async() => {      
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories ); 
+
       const products = await api.getProducts();
       new ProductList().mount(new Main().element, products, 'Избранное');
       router.updatePageLinks();
@@ -60,12 +70,15 @@ export const routerFunc = (api, storageService) => {
       console.log("On cart");
     })
     .on('/product/:id', async({data: {id} }) => {
+      const productCategories = await api.getProductCategories();
+      new Catalog().mount( new Main().element, productCategories ); 
+      router.updatePageLinks();
       console.log(id);
       const temp = await api.getProductByID(id)
       console.log(temp);
+
     }, {
-      leave(done) {
-        router.updatePageLinks();
+      leave(done) {        
         done();
       }
     })
@@ -78,17 +91,22 @@ export const routerFunc = (api, storageService) => {
     })
     .notFound(() => {      
       console.log(new Main());
-      new Main().element.innerHTML = `
-        <h2>NOT FOUND</h2>
-        <p>Через 5 секунд вы будете перенаправлены на <a> главную страницу</a></p>
-      `
+      new Error().mount();
+      // new Main().element.innerHTML = `
+      //   <h2>NOT FOUND</h2>
+      //   <p>Через 5 секунд вы будете перенаправлены на <a> главную страницу</a></p>
+      // `
       setTimeout(() => {
         router.navigate('/');
       }, 5000)
     }, {
+      before(done) {
+        new Catalog().unMount();
+        done();
+      },
       leave(done) {
         console.log('leave');
-        new Main().element.innerHTML = '';    
+        new Error().unMount();  
         done();        
       }
     })
