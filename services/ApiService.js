@@ -34,7 +34,9 @@ export class ApiService {
   //   console.log(data);
   // }
 
-  async getData(pathname, params = {}) {    
+  async getData(pathname, params = {}) {   
+    console.log('params: ', params);
+    
     if (!this.accessKey) {
       await this.getAccessKey();
     }
@@ -60,7 +62,12 @@ export class ApiService {
   }
 
   async getProducts(page = 1, limit = 12, list, category, q) {
-    return await this.getData('api/products', {
+    console.log('page == ', page);
+    console.log('limit == ', limit);
+    console.log('list == ', list);
+    console.log('category == ', category);
+    console.log('q == ', q);
+    return await this.getData(`api/products`, {
       page,
       limit,
       list,
@@ -69,8 +76,8 @@ export class ApiService {
     });
   }
 
-  async getProductCategories() {
-    return await this.getData('api/productCategories');
+  async getProductCategories() {    
+    return await this.getData(`api/productCategories`);
   }
 
   async getProductByID(id) {    

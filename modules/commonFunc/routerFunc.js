@@ -39,8 +39,10 @@ export const routerFunc = (api, storageService) => {
       const productCategories = await api.getProductCategories();
       new Catalog().mount( new Main().element, productCategories ); 
 
-      const products = await api.getProducts();
-      new ProductList().mount(new Main().element, products, slug);
+      console.log(slug);
+      const data = await api.getProducts(1, 12, [], slug);
+      console.log(data);
+      new ProductList().mount(new Main().element, data, slug);
       router.updatePageLinks();
     }, {
       leave(done) {
@@ -89,13 +91,8 @@ export const routerFunc = (api, storageService) => {
       new Order().mount(new Main().element);                  
 
     })
-    .notFound(() => {      
-      console.log(new Main());
-      new Error().mount();
-      // new Main().element.innerHTML = `
-      //   <h2>NOT FOUND</h2>
-      //   <p>Через 5 секунд вы будете перенаправлены на <a> главную страницу</a></p>
-      // `
+    .notFound(() => {            
+      new Error().mount();      
       setTimeout(() => {
         router.navigate('/');
       }, 5000)
