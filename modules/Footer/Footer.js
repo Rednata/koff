@@ -21,8 +21,7 @@ export class Footer {
     if (this.isMounted) {
       return;
     }
-    const logo = new Logo('footer').create();
-    console.log(logo);
+    const logo = new Logo('footer').create();    
     this.containerElement.append(logo);
     
     this.containerElement.insertAdjacentHTML('beforeend', this.getHTML());  
