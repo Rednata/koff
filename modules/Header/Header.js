@@ -1,5 +1,6 @@
 import { addContainer } from "../addContainer";
-import logoImg from '/img/logo.svg';
+// import logoImg from '/img/logo.svg';
+import { Logo } from "../../features/Logo/Logo";
 
 export class Header {
   static instance = null;
@@ -21,7 +22,7 @@ export class Header {
       return;
     }
 
-    const logo = this.getLogo();
+    const logo =  new Logo('header').create();
     const searchForm = this.getSearchForm();
     const navigation = this.getNavigation();
 
@@ -30,21 +31,6 @@ export class Header {
     document.body.append(this.element);
     this.isMounted = true;
   }
-
-  getLogo() {
-    const logo = document.createElement('a');
-    logo.classList.add('header__link-logo');
-    logo.href = '/';
-
-    const imgLogo = new Image();
-    imgLogo.src = logoImg;
-    imgLogo.className = 'header__logo';
-    imgLogo.alt = 'Логотип мебельного маркета Koff';
-
-    logo.append(imgLogo)
-    
-    return logo;
-  };
 
   getSearchForm() {
     const searchForm = document.createElement('form');

@@ -77,6 +77,18 @@
     padding: 12px 24px;
     width: 100%;
 
+    &:hover {
+      color: #fff;      
+      background-color: #9200B7;
+      border-color: #9200B7;
+    }
+
+    &:active {
+      border-color: #C0F;   
+      background-color: #fff;
+      color: #C0F;
+    }
+
     @media (min-width: 580px) {      
     }      
   }
@@ -92,12 +104,20 @@
         fill: #fff;
       }
 
-    &:hover{
+    &:hover, 
+    &_active {
       color: #780096;    
       svg {
         fill: #780096;
       }        
     }    
+
+    &:active {
+      color: #C0F;   
+      svg {
+        fill: #C0F;
+      }        
+    }
 
     &:focus-visible {
       outline-color: #780096;      
