@@ -4,6 +4,8 @@ import { Main } from '../Main/Main';
 import { Catalog } from "../Catalog/Catalog";
 import { ProductList } from "../ProductList/ProductList";
 import { Error } from "../Error/Error";
+import { FavoriteService } from "../../services/StorageService";
+import { Logger } from "sass";
 
 export const routerFunc = (api, storageService) => {
   const router = new Navigo("/", { linksSelector: "a" });
@@ -22,6 +24,7 @@ export const routerFunc = (api, storageService) => {
 
       const products = await api.getProducts();                        
       const data = {data: products}            
+      console.log('data: ', data);
       new ProductList().mount(new Main().element, data, );
 
       router.updatePageLinks();
@@ -40,7 +43,12 @@ export const routerFunc = (api, storageService) => {
       const productCategories = await api.getProductCategories();
       new Catalog().mount( new Main().element, productCategories ); 
       
-      const data = await api.getProducts(1, 12, [], slug);
+      const data = await api.getProducts({
+        page: 1,
+        limit: 12,
+        list: [],
+        category: slug,
+      });
 
       new ProductList().mount(new Main().element, data, slug);
       router.updatePageLinks();
@@ -54,17 +62,24 @@ export const routerFunc = (api, storageService) => {
     .on('/favorite', async() => {      
       const productCategories = await api.getProductCategories();
       new Catalog().mount( new Main().element, productCategories ); 
+      
+      const list = new FavoriteService().get();      
 
-      const products = await api.getProducts();      
-      const data = {data: products}  
-      new ProductList().mount(new Main().element, data, 'Избранное');
+      const products = await api.getProducts({
+        page: 1,
+        limit: 12,
+        list,
+      });
+
+      new ProductList().mount(new Main().element, products, 'Избранное');
       router.updatePageLinks();
-    },  {
+    }, {
       leave(done) {
         new ProductList().unMount();
         console.log('leave');
         done();
       }
+
     })
     .on('/search', () => {
       console.log("On search");

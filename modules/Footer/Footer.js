@@ -1,5 +1,6 @@
 import { addContainer } from "../addContainer";
-import logoImg from '/img/logo.svg';
+// import logoImg from '/img/logo.svg';
+import { Logo } from "../../features/Logo/Logo";
 
 export class Footer {
   static instance = null;
@@ -20,8 +21,7 @@ export class Footer {
     if (this.isMounted) {
       return;
     }
-    const logo = this.getLogo();
-
+    const logo = new Logo('footer').create();    
     this.containerElement.append(logo);
     
     this.containerElement.insertAdjacentHTML('beforeend', this.getHTML());  

@@ -1,13 +1,13 @@
 import { API_URL } from "../const";
-// import { ServiceAccessKey } from "./LocalStorageService";
 import axios from 'axios';
+import { AccessKeyService } from "./StorageService";
 
 export class ApiService {
   #apiURL = API_URL;
 
   constructor() {
-    this.accessKey = localStorage.getItem('accessKey');
-    console.log(this.accessKey);
+    this.accessKeyService = new AccessKeyService();
+    this.accessKey = this.accessKeyService.get()    
   }
 
   async getAccessKey() {    
@@ -16,7 +16,7 @@ export class ApiService {
         const response = await axios.get(`${this.#apiURL}api/users/accessKey`);           
         this.accessKey = response.data.accessKey;
         
-        localStorage.setItem('accessKey', this.accessKey);
+        this.accessKeyService.set(this.accessKey);
         console.log(this.accessKey);
       }     
 
@@ -24,15 +24,6 @@ export class ApiService {
       console.log(error);
     }
   }
-
-  // async getData() {
-  //   const data = await axios.get(`${API_URL}api/products`, {
-  //     headers: {
-  //       Authorization: `Bearer ${this.accessKey}`
-  //     }
-  //   });
-  //   console.log(data);
-  // }
 
   async getData(pathname, params = {}) {       
     
@@ -51,7 +42,7 @@ export class ApiService {
     } catch (error) {
       if (error.response && error.response.status === 401) {
         this.accessKey = null;
-        localStorage.removeItem('accessKey');
+        this.accessKeyService.delete();
 
         return this.getData(pathname, params)
       } else {
@@ -60,7 +51,16 @@ export class ApiService {
     }
   }
 
-  async getProducts(page = 1, limit = 12, list, category, q) {
+  async getProducts(params = {}) {
+    if (params.list) {
+      params.list = params.list.join(",");
+      console.log(params);
+    }
+
+    return await this.getData(`api/products`, params);
+  }
+
+  async getProducts1(page = 1, limit = 12, list, category, q) {
 
     return await this.getData(`api/products`, {
       page,
