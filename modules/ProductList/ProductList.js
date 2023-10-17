@@ -18,7 +18,7 @@ export class ProductList {
   }
 
   mount(parent, {data, pagination: paginationData}, title) {  
-    
+    console.log(123);
     this.containerElement.textContent = '';
 
     const titleElement = document.createElement('h2');
@@ -50,7 +50,8 @@ export class ProductList {
 
   }
 
-  updateListElem(data = []) {        
+  updateListElem(data = []) { 
+    console.log(data);       
     const listElem = document.createElement('ul');
     listElem.classList.add('goods__list');    
 

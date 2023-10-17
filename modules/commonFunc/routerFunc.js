@@ -78,7 +78,20 @@ export const routerFunc = (api, storageService) => {
         new ProductList().unMount();
         console.log('leave');
         done();
-      }
+      },  
+      already() {
+        console.log('already');
+        const list = new FavoriteService().get();      
+        
+        api.getProducts({
+          page: 1,
+          limit: 12,
+          list,
+        })
+          .then(products => {
+          new ProductList().mount(new Main().element, products, 'Избранное');
+        })        
+      },
 
     })
     .on('/search', () => {
