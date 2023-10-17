@@ -1,37 +1,75 @@
-import { API_URL } from "../const";
-import axios from 'axios';
-
 export class StorageService {
-  #apiURL = API_URL;
-
-  constructor() {
-    this.accessKey = this.getAccessKey();
+  constructor(key) {
+    this.key = key;
   }
 
-  async getAccessKey() {    
-    try {
-      if (!this.accessKey) {         
-        const response = await axios.get(`${this.#apiURL}api/users/accessKey`);           
-        this.accessKey = response.data.accessKey;
-        
-        localStorage.setItem('accessKey', this.accessKey);
-        console.log(this.accessKey);
-      }     
+  get() {
+    return localStorage.getItem(this.key) || null;
+  }
 
-    } catch (error) {
-      console.log(error);
+  set(data) {
+    console.log(data);
+    if (typeof data === 'object') {
+      data = JSON.stringify(data);
+      console.log(data);
     }
+    localStorage.setItem(this.key, data);
   }
 
-  // getAccessKey() {
-  //   return localStorage.getItem('accessKey');
-  // }
+  delete() {
+    localStorage.removeItem(this.key);
+  }
+}
 
-  delAccessKey() {
-    localStorage.remove('accessKey');
+export class FavoriteService extends StorageService {
+  static instance;
+  constructor(key = 'favorite') {
+    if (!FavoriteService.instance) {
+      super(key)
+      this.favorite = new Set(this.get())
+      FavoriteService.instance = this;
+    }    
+    return FavoriteService.instance;
   }
 
-  setAccessKey(accessKey) {
-    localStorage.getItem('accessKey', accessKey);
+  get() {
+    const data = super.get();
+
+    if (data) {
+      const favorite = JSON.parse(data);
+      if (Array.isArray(favorite)) {
+        return favorite
+      }
+    } 
+    return []
+  }
+
+  add(value) {
+    this.favorite.add(value);
+    this.set([...this.favorite])
+  }
+
+  remove(value) {
+    if (this.check(value)) {
+      this.favorite.delete(value);
+      this.set([...this.favorite]);
+      return true
+    }
+    return false;
+  }
+
+  check(value) {
+    return this.favorite.has(value)
+  }
+}
+
+export class AccessKeyService extends StorageService {
+  static instance;
+  constructor(key = 'accessKey') {
+    if (!AccessKeyService.instance) {
+      super(key)      
+      AccessKeyService.instance = this;
+  }    
+    return AccessKeyService.instance;
   }
 }
